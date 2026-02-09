@@ -1,0 +1,365 @@
+﻿<Window x:Class="View.GameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:View"
+        mc:Ignorable="d"
+        Title="GameWindow" Height="450" Width="800">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding StepUpCommand}" CommandParameter="3" Key="I"/>
+        <KeyBinding Command="{Binding StepLeftCommand}" CommandParameter="3" Key="J"/>
+        <KeyBinding Command="{Binding StepDownCommand}" CommandParameter="3" Key="K"/>
+        <KeyBinding Command="{Binding StepRightCommand}" CommandParameter="3" Key="L"/>
+        <KeyBinding Command="{Binding StepUpCommand}" CommandParameter="2" Key="W"/>
+        <KeyBinding Command="{Binding StepLeftCommand}" CommandParameter="2" Key="A"/>
+        <KeyBinding Command="{Binding StepDownCommand}" CommandParameter="2" Key="S"/>
+        <KeyBinding Command="{Binding StepRightCommand}" CommandParameter="2" Key="D"/>
+        <KeyBinding Command="{Binding StepUpCommand}" CommandParameter="1" Key="Up"/>
+        <KeyBinding Command="{Binding StepDownCommand}" CommandParameter="1" Key="Down"/>
+        <KeyBinding Command="{Binding StepRightCommand}" CommandParameter="1" Key="Right"/>
+        <KeyBinding Command="{Binding StepLeftCommand}" CommandParameter="1" Key="Left"/>
+        <KeyBinding Command="{Binding PlaceBoxCommand}" CommandParameter="1" Key="E"/>
+        <KeyBinding Command="{Binding PlantBombCommand}" CommandParameter="1" Key="B"/>
+        <KeyBinding Command="{Binding PlantBombCommand}" CommandParameter="2" Key="Q"/>
+        <KeyBinding Command="{Binding PauseGameCommand}" CommandParameter="P" Key="P"/>
+    </Window.InputBindings>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="20,20,20,20">
+            <TextBlock Text="Round: " FontWeight="Bold"></TextBlock>
+            <TextBlock Text="{Binding Round}"></TextBlock>
+        </StackPanel>
+
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20,20,20,20">
+            <TextBlock Text="Time: " FontWeight="Bold"></TextBlock>
+            <TextBlock Text="{Binding GameTime}"></TextBlock>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="20,20,20,20">
+            <TextBlock Text="Player 1 " FontWeight="Bold"></TextBlock>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="win: " FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Player1.Score}"></TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="20,20,20,20">
+            <TextBlock Text="Player 2 " FontWeight="Bold"></TextBlock>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="win: " FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Player2.Score}"></TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="20,20,20,20">
+            <TextBlock Text="Player 3 " FontWeight="Bold"></TextBlock>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="win: " FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding Player3.Score}"></TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="20,20,20,20">
+            <Button Command="{Binding BackToMenuCommand}" FontWeight="Bold" IsEnabled="{Binding IsGameStarted}">
+                Back to Menu
+            </Button>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="6" Margin="20,20,20,20">
+            <Button Command="{Binding SaveGameCommand}" FontWeight="Bold">
+                Save
+            </Button>
+            <Button Command="{Binding PauseGameCommand}" FontWeight="Bold" Content="{Binding PauseText}"></Button>
+        </StackPanel>
+
+        <ItemsControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="6" ItemsSource="{Binding GameFields}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="{Binding RowSize}" Columns="{Binding ColumnSize}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Width="auto" Height="auto">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPlayer1}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman1.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer1GhostFull}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman1GhostFull.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer1GhostLow}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman1GhostLow.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer1InvincibleFull}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman1InvincibleFull.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer1InvincibleLow}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman1InvincibleLow.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer2}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman2.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer2GhostFull}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman2GhostFull.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer2GhostLow}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman2GhostLow.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer2InvincibleFull}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman2InvincibleFull.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer2InvincibleLow}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman2InvincibleLow.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer3}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman3.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer3GhostFull}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman3GhostFull.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer3GhostLow}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman3GhostLow.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer3InvincibleFull}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman3InvincibleFull.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsPlayer3InvincibleLow}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomberman3InvincibleLow.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsBox}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/box.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsWall}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/wall.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsBomb}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bomb.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDangerZone}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/dangerzone.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsExtraBombs}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/extraBomb.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsBiggerBlast}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bombRangeUp.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDetonator}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/detonator.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsRollerSkate}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/rollerskate.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsInvincibility}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/invincibility.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsGhostPowerup}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/ghostPowerup.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsBarrier}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/barrier.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsSlower}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/slower.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsSmallRange}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/bombRangeDown.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsNoBomb}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/noBomb.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsInstantBomb}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/instnatBomb.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/default.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsNoob}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/noob.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsGhost}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/ghost.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsFrankeinstein}" Value="true">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/images/frankeinstein.png"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding X}" />
+                    <Setter Property="Grid.Column" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+
+    </Grid>
+</Window>
