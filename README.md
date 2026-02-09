@@ -1,0 +1,1 @@
+# ELTE-IK-Szoftvertechnol-gia-2024
